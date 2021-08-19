@@ -7,6 +7,17 @@ body {
     box-shadow: 0 10px 30px 0 rgba(24, 28, 33, 0.05);
 }
 
+/* custom */
+.custom__trade--card {
+    background: #014f8626;
+}
+
+.chat__container--main {
+    background: #014f8626;
+}
+
+/* custom */
+
 .main-header-center .form-control {
     border: 1px solid #eceef5;
 }

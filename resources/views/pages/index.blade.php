@@ -98,7 +98,7 @@
                     The best market place for your crypto buying and selling
                 </h1>
                 <h6 class="mt-3">We’ve got everything you need 👌</h6>
-                <button class="btn btn-primary mt-3">Market place</button>
+                <a href="{{route('market.place')}}" class="btn btn-primary mt-3">Market place</a>
             </div>
         </div>
     </div>

@@ -15,3 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [PagesController::class, 'index'])->name('index');
+Route::get('/connect/wallet', [PagesController::class, 'connectWallet'])->name('connect.wallet');
+Route::get('/market', [PagesController::class, 'marketPlace'])->name('market.place');
+Route::get('/profile', [PagesController::class, 'profile'])->name('user.profile');
+Route::get('/open/trade', [PagesController::class, 'openTrade'])->name('trade.open');
+Route::get('/payment', [PagesController::class, 'paymentPage'])->name('payment');

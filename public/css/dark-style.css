@@ -60,7 +60,7 @@
     color: #fff;
 }
 
-/* cutom */
+/* custom */
 
 .dark-theme .item h3 {
     color: black;
@@ -74,7 +74,13 @@
     color: #000000;
 }
 
-/* cutom */
+.dark-theme .custom__trade--card {
+    background: rgb(1 79 134 / 40%);
+}
+.dark-theme .chat__container--main {
+    background: #012A4A;
+}
+/* custom */
 
 .dark-theme .table th,
 .dark-theme .table td {
@@ -355,13 +361,13 @@
 
 .dark-theme .form-control {
     color: #d0d0e2;
-    background-color: #252542;
+    background-color: #012A4A;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .dark-theme .form-control:focus {
     color: #ffffff;
-    background-color: #252542;
+    background-color: #012A4A;
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -387,7 +393,7 @@
 
 .dark-theme .form-control:disabled,
 .dark-theme .form-control[readonly] {
-    background-color: #27273e;
+    background-color: #012A4A;
     opacity: 1;
 }
 
@@ -881,8 +887,8 @@
 
 .dark-theme .input-group-text {
     color: #fdfeff;
-    background-color: #252542;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background-color: #012a4a;
+    border: 1px solid rgb(34 77 114);
 }
 
 .dark-theme .custom-control-input:checked ~ .custom-control-label::before {
@@ -2868,7 +2874,7 @@
 }
 
 .dark-theme .ckbox span:before {
-    background-color: #252542;
+    background-color: #012a4a;
     border: 1px solid rgba(204, 211, 228, 0.2) !important;
 }
 
@@ -4102,7 +4108,7 @@
 
 .dark-theme .main-chat-footer {
     border-top: 1px solid rgba(255, 255, 255, 0.12);
-    background-color: #0e0e23;
+    background-color: #012a4a;
 }
 
 .dark-theme .main-chat-footer .nav-link {
@@ -5064,7 +5070,7 @@
 }
 
 .dark-theme .select2-dropdown {
-    background-color: #252542;
+    background-color: #012a4a;
     border-color: rgba(255, 255, 255, 0.05);
 }
 
@@ -5073,7 +5079,7 @@
     .select2-search--dropdown
     .select2-search__field {
     border: 1px solid rgba(255, 255, 255, 0.12);
-    background: #000000;
+    background: #02182c;
     color: #ffffff;
     border-radius: 0;
 }
@@ -5616,7 +5622,7 @@
 
 .dark-theme .main-msg-wrapper:before,
 .dark-theme .main-msg-wrapper:after {
-    border-color: transparent #0b2937 transparent transparent;
+    border-color: transparent #004157 transparent transparent;
 }
 
 .dark-theme .main-chat-body .media.flex-row-reverse .main-msg-wrapper {
@@ -7049,7 +7055,7 @@ body.dark-theme {
 }
 
 .dark-theme .select2-container--default .select2-selection--single {
-    background-color: #252542;
+    background-color: #012a4a;
     border: 0;
 }
 

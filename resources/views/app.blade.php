@@ -17,6 +17,9 @@
         <link rel="stylesheet" href="{{asset('/css/colors/color.css')}}">
         <link rel="stylesheet" href="{{asset('/css/sidemenu.css')}}">
         <link rel="stylesheet" href="{{asset('/css/owl-carousel.min.css')}}">
+        <link rel="stylesheet" href="{{asset('/css/icon-list.css')}}">
+        <link rel="stylesheet" href="{{asset('/css/select2.min.css')}}">
+
 
           <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
@@ -54,7 +57,7 @@
                                 <a href="" class="nav-link">FAQ</a>
                             </li>
                         </ul>
-                        <button class="btn btn-primary">Trade now</button>
+                        <a href="{{route('connect.wallet')}}" class="btn btn-primary">Trade now</a>
                         <button class="navbar-toggler navresponsive-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
                             aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fe fe-more-vertical header-icons navbar-toggler-icon"></i>
