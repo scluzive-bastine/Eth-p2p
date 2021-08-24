@@ -98,7 +98,7 @@
                     The best market place for your crypto buying and selling
                 </h1>
                 <h6 class="mt-3">We’ve got everything you need 👌</h6>
-                <a href="{{route('market.place')}}" class="btn btn-primary mt-3">Market place</a>
+                <a href="{{route('market.place')}}" class="btn btn-primary btn-lg mt-3">Market place <i class="fe fe-arrow-right"></i> </a>
             </div>
         </div>
     </div>
@@ -437,12 +437,10 @@
         <div class="container">
             <div class="inner-body pt-lg-5 pt-5 mt-5">
                 <div class="text-center pt-lg-5 pt-5 mt-lg-5" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="1000">
-                    {{-- <h6>WE KNOW BUYING AND SELLING IS NOT EASY</h6> --}}
                     <h1 class="header-h1">
                         Start Trading
                     </h1>
-                    {{-- <h6 class="mt-3">We’ve got everything you need 👌</h6> --}}
-                    <button class="btn btn-primary mt-3">Market place</button>
+                    <a href="{{route('market.place')}}" class="btn btn-primary btn-lg mt-3">Market place <i class="fe fe-arrow-right"></i> </a>
                 </div>
             </div>
         </div>

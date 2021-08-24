@@ -30,7 +30,7 @@
             <div class="main-header side-header">
                 <div class="container">
                     <div class="main-header-left">
-                        <a class="main-header-menu-icon d-lg-none" href="" id="mainNavShow"><span></span></a>
+                        {{-- <a class="main-header-menu-icon d-lg-none" href="" id="mainNavShow"><span></span></a> --}}
                         <a class="main-logo" href="{{route('index')}}">
                             <img src="{{asset('/img/p2p-logo.png')}}" class="header-brand-img desktop-logo" alt="logo">
                             <img src="{{asset('/img/p2p-logo.png')}}" class="header-brand-img desktop-logo theme-logo" alt="logo">
@@ -57,7 +57,15 @@
                                 <a href="" class="nav-link">FAQ</a>
                             </li>
                         </ul>
-                        <a href="{{route('connect.wallet')}}" class="btn btn-primary">Trade now</a>
+                        <a href="{{route('connect.wallet')}}" class="btn btn-primary">Connect Wallet</a>
+
+                        {{-- if authenicated --}}
+                        {{-- <a href="{{route('user.profile')}}" class="nav-link font-weight-bolder">
+                            <i class="fe fe-user"></i>
+                            Jane
+                        </a> --}}
+                        {{-- if authenicated --}}
+
                         <button class="navbar-toggler navresponsive-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
                             aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fe fe-more-vertical header-icons navbar-toggler-icon"></i>
@@ -85,11 +93,11 @@
                                 <a href="" class="nav-link">FAQ</a>
                             </li>
                         </ul>
-                        <div class="dropdown  header-settings d-flex">
+                        {{-- <div class="dropdown  header-settings d-flex">
                             <a href="#" class="nav-link icon ml-auto" data-toggle="sidebar-right" data-target=".sidebar-right">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-align-right header-icons"><line x1="21" y1="10" x2="7" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="7" y2="18"></line></svg>
                             </a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -102,6 +110,51 @@
                 {{-- </div> --}}
             </div>
             {{-- Main content --}}
+
+            {{-- footer --}}
+            <div class="main-footer mt-5">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-sm-12 col-md-4">
+                            <img src="{{asset('/img/p2p-logo.png')}}" class="img-fluid" alt="logo">
+                            <p class="mt-3">
+                                © 2021 VendCryptos Ltd
+                            </p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-4">
+                            <h5>Links</h5>
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a href="" class="nav-link pl-0">FAQ</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="" class="nav-link pl-0">Reviews</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="" class="nav-link pl-0">Features</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-4">
+                            <h5>Community</h5>
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a href="" class="nav-link pl-0">
+                                        <i class="fab fa-telegram" aria-hidden="true"></i>
+                                        Telegram
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="" class="nav-link pl-0">
+                                        <i class="fab fa-twitter" aria-hidden="true"></i>
+                                        Twitter
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
             <a href="#top" id="back-to-top"><i class="fe fe-arrow-up"></i></a>
@@ -114,10 +167,21 @@
         <script src="{{asset('/js/select2.min.js')}}"></script>
         <script src="{{asset('/js/sidebar.js')}}"></script>
         <script src="{{asset('/js/crypto-dashboard.js')}}"></script>
+        <script src="{{asset('/js/clipboard/clipboard.min.js')}}"></script>
+        <script src="{{asset('/js/clipboard/clipboard.js')}}"></script>
+        <script src="{{asset('/js/crypto-dashboard.js')}}"></script>
+
         {{-- <script src="{{asset('/js/sticky.js')}}"></script> --}}
         {{-- for dashboard --}}
         <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
         @stack('scripts')
+        <script>
+            $(document).ready(function() {
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip()
+                })
+            })
+        </script>
     </body>
 </html>

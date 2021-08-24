@@ -1,5 +1,47 @@
 @extends('app')
 
+<style>
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+        margin-top: -3.5rem;
+    }
+
+    .inputfile+label {
+        border-radius: 5px;
+        padding: .4rem;
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+        font-size: 1.5rem
+    }
+
+    .pRIMGCONT {
+        overflow: hidden;
+        border-radius: 50rem;
+    }
+    .pRIMGCONT img {
+        object-fit: cover;
+        height: 89.31px;
+        width: 89.31px;
+    }
+    .pRIMGCONT:hover .cHPROIX {
+        display: block;
+        background-color: #014f86b3;
+    }
+    .cHPROIX {
+        background: #f5f5f569;
+        margin-top: -3.3rem;
+        z-index: 2;
+        position: relative;
+        display: none;
+    }
+</style>
+
 @section('content')
     <div class="container mt-5 pt-5">
         <div class="row justify-content-center">
@@ -7,13 +49,27 @@
                 <div class="custom__trade--card shadow">
                     <div class="row justify-content-center">
                         <div class="col-4 col-sm-4 col-md-4 col-lg-4 d-flex justify-content-center align-items-center">
-                            <div class="">
+                            <div class="pRIMGCONT">
                                 <img src="{{asset('/img/profile/avatar-2.jpg')}}" class="img-fluid rounded-pill" alt="">
+                                {{-- change profile picture if authenticated --}}
+                                <div class="w-100 text-white text-center p-1 text-xl cHPROIX">
+                                    <input type="file" name="image" id="file" class="inputfile image">
+                                    <label class="d-flex justify-content-center" for="file"> <i
+                                            class="fe fe-camera" aria-hidden="true"></i></label>
+                                </div>
+                                {{-- change profile picture if authenticated --}}
                             </div>
                         </div>
                         <div class="col-8 col-sm-8 col-md-8 col-lg-8 d-flex align-items-center">
                             <div>
-                                <h3>Jane</h3>
+                                <h3>
+                                    Jane
+                                    <small  data-placement="top" data-toggle="tooltip" title="Edit username">
+                                        <a class="modal-effect" data-effect="effect-scale" data-toggle="modal" href="#userNameModal">
+                                            <i class="fe fe-edit-2"></i>
+                                        </a>
+                                    </small>
+                                </h3>
                                 <div>Reliable trader</div>
                                 <div>
                                      <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,7 +110,13 @@
                         <div class="col-12">
                             <h3>Verifications</h3>
                             <div class="d-flex justify-content-between">
-                                <h6>Email Address </h6>
+                                <h6>Email Address 
+                                    <small data-placement="top" data-toggle="tooltip" title="Add email">
+                                        <a class="modal-effect" data-effect="effect-scale" data-toggle="modal" href="#addEmail">
+                                            <i class="fe fe-edit-2"></i>
+                                        </a>
+                                    </small>
+                                </h6>
                                 <h6>
                                     <span class="dot-label bg-success"></span>
                                     Verified
@@ -71,10 +133,32 @@
                     </div>
                     <hr>
                     <div>
-                        <h3>Blurb</h3>
+                        <h3>
+                            Blurb
+                            <small data-placement="top" data-toggle="tooltip" title="Add blurb">
+                                <a class="modal-effect" data-effect="effect-scale" data-toggle="modal" href="#blurbModal">
+                                    <i class="fe fe-edit-2"></i>
+                                </a>
+                            </small>
+                        </h3>
                         <p>
                             Be the best thing that will happen to me. Yes, You reading this!
                             Sure, your life will enjoy my partnership! Let's Crypto it!
+                        </p>
+                    </div>
+                    <hr>
+                    <div>
+                        <h3>
+                            Terms of trade
+                            <small data-placement="top" data-toggle="tooltip" title="Add terms of trade">
+                                <a class="modal-effect" data-effect="effect-scale" data-toggle="modal" href="#termsOfTrade">
+                                    <i class="fe fe-edit-2"></i>
+                                </a>
+                            </small>
+                        </h3>
+                        <p>
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
+                            Culpa distinctio in soluta deserunt ipsam voluptates sequi explicabo! 
                         </p>
                     </div>
                     <hr>
@@ -174,9 +258,105 @@
                         </div>
                     </div>
                 </div>
+                <hr>
+                <div class="open__trades--container">
+                    <h3 class="mt-3">Referral Program</h3>
+                    <div class="custom__trade--card shadow">
+                        <div class="input-group my-4">
+                            <input type="text" class="form-control input-lg" value="https://vendcryptos.com/" id="dash-wallet">
+                            <span class="input-group-addon-right bg-light clipboard-icon" data-clipboard-target="#dash-wallet" data-toggle="tooltip" title="" data-original-title="Copy to clipboard"><i class="fe fe-copy"></i></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <!-- Modal effects -->
+    <div class="modal" id="userNameModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-body">
+                    <h4 class="mb-1">Change your Username</h4>
+                    <p>
+                        Other traders can find you with your username
+                    </p>
+                    <form action="" class="mt-3">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder=" 0x5571...e8faf9">
+                        </div>
+                        <div class="d-flex">
+                            <button class="btn ripple btn-primary" type="button">Update</button>
+                            <button class="btn ripple btn-secondary ml-2" data-dismiss="modal" type="button">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="blurbModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-body">
+                    <h4 class="mb-1">Add your blurb</h4>
+                    <p>
+                        A short description about you
+                    </p>
+                    <form action="" class="mt-3">
+                        <div class="form-group">
+                            <textarea name="" id="" cols="30" rows="5" class="form-control"></textarea>
+                        </div>
+                        <div class="d-flex">
+                            <button class="btn ripple btn-primary" type="button">Update</button>
+                            <button class="btn ripple btn-secondary ml-2" data-dismiss="modal" type="button">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="modal" id="termsOfTrade">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-body">
+                    <h4 class="mb-1">Add Terms of trade</h4>
+                    <p>
+                        Describe your terms of trade
+                    </p>
+                    <form action="" class="mt-3">
+                        <div class="form-group">
+                            <textarea name="" id="" cols="30" rows="5" class="form-control"></textarea>
+                        </div>
+                        <div class="d-flex">
+                            <button class="btn ripple btn-primary" type="button">Update</button>
+                            <button class="btn ripple btn-secondary ml-2" data-dismiss="modal" type="button">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="addEmail">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-body">
+                    <h4 class="mb-1">Email address</h4>
+                    <p>
+                        Your email address is not public, only you can see it
+                    </p>
+                    <form action="" class="mt-3">
+                        <div class="form-group">
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="d-flex">
+                            <button class="btn ripple btn-primary" type="button">Update</button>
+                            <button class="btn ripple btn-secondary ml-2" data-dismiss="modal" type="button">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal effects-->
     @push('scripts')
         <script>
             $(document).ready(function() {
