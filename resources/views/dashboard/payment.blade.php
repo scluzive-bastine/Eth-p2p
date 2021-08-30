@@ -54,15 +54,15 @@
                     </form>
                 </div>
             </div>
-            <div class="col-12 col-sm-12 col-md-5 col-lg-8">
+            <div class="col-12 col-sm-12 col-md-7 col-lg-8">
                 <div class="custom__trade--card shadow">
                     <div class="row justify-content-center">
-                        <div class="col-12 col-sm-12 col-md-2 col-lg-4 d-flex align-items-center">
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 d-flex align-items-center">
                             <div class="payment__status--container">
                                 <i class="fe fe-lock"></i>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-12 col-md-10 col-lg-8 d-flex align-items-center">
+                        <div class="col-12 col-sm-12 col-md-8 col-lg-8 d-flex align-items-center">
                             <div>
                                 <h6 class="mb-1">Waiting for the seller</h6>
                                 <p>

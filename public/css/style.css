@@ -724,22 +724,26 @@ pre code {
     padding: 1rem;
 }
 
+.custom__trade--card a {
+    font-size: 20px;
+}
+
 .chat__container--main {
     border-radius: 10px;
     padding: 1rem;
 }
 .custom__trade--card-footer span {
-    margin-right: .5rem;
+    margin-right: 0.5rem;
 }
-.trader__req--container div{
+.trader__req--container div {
     height: 30px;
     width: 30px;
-    background: #A9D6E5;
+    background: #a9d6e5;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50px;
-    margin-right: .5rem;
+    margin-right: 0.5rem;
 }
 .trader__profile--image {
     width: 50px;
@@ -784,17 +788,20 @@ pre code {
     background: #ffffff1f;
 }
 
-.payment__status--icon .status__icon{
+.payment__status--icon .status__icon {
     height: 30px;
     width: 30px;
     /* background: #008001; */
     background: #012a4a;
+    color: #fff;
     border-radius: 50%;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-    
+}
+#dark-mode-toggle {
+    cursor: pointer;
 }
 /* custom */
 
@@ -882,7 +889,7 @@ pre code {
 
 .accordion .card-header a.collapsed {
     color: #3c4858;
-    background-color: #e1e1f9;
+    background-color: #fff;
     border-bottom-color: transparent;
 }
 
@@ -2274,7 +2281,7 @@ fieldset:disabled a.btn {
 
 .btn-danger {
     color: #ffffff;
-    background-color:#981a2a;
+    background-color: #981a2a;
     border-color: #981a2a;
 }
 
@@ -9831,9 +9838,10 @@ div.dataTables_wrapper div.dataTables_length select {
     background-color: #ffffff;
     margin-top: 0;
     padding: 15px;
-    position: relative;
+    position: absolute;
     bottom: 0;
     display: block;
+    width: 100%;
     margin-top: auto;
 }
 
@@ -71340,6 +71348,9 @@ input[type="search"]::-webkit-search-cancel-button {
         display: none;
         height: 0;
     }
+    .custom__trade--card {
+        margin-top: 1rem;
+    }
 }
 
 .mobile-main-header .navbar {
@@ -71408,6 +71419,9 @@ input[type="search"]::-webkit-search-cancel-button {
     .horizontalmenu .header-brand-img.desktop-logo {
         display: none;
     }
+    .main-content {
+        padding-bottom: 30rem;
+    }
 }
 
 @media (max-width: 599px) {
@@ -71422,7 +71436,7 @@ input[type="search"]::-webkit-search-cancel-button {
     }
     .header-h1 {
         font-size: 42px;
-        font-weight:500;
+        font-weight: 500;
     }
 
     .main-header-center {
@@ -71516,6 +71530,22 @@ input[type="search"]::-webkit-search-cancel-button {
         justify-content: center;
         margin: 0 auto;
     }
+    /* custom */
+    .custom__trade--card {
+        margin-top: 1rem;
+    }
+    .main-content {
+        padding-bottom: 30rem;
+    }
+    .psYSICON::before {
+        display: none;
+    }
+    .psYSICON::after {
+        display: none;
+    }
+    .payment__status--container {
+        margin-bottom: 10px;
+    }
 }
 
 .media img {
@@ -71571,6 +71601,14 @@ input[type="search"]::-webkit-search-cancel-button {
 @media (max-width: 768px) {
     .nav.main-nav-line {
         display: block;
+    }
+    .psYSICON::before {
+        width: 60px;
+        left: -30px;
+    }
+    .psYSICON::after {
+        width: 60px;
+        left: 80px;
     }
 }
 
@@ -71957,6 +71995,7 @@ input[type="search"]::-webkit-search-cancel-button {
     .main-content {
         padding-top: 58px;
         padding-top: 58px;
+        padding-bottom: 20rem;
     }
 
     .main-content.side-content {

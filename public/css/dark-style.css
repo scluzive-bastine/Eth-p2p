@@ -1728,7 +1728,7 @@
 }
 
 .dark-theme .bg-light {
-    background-color: #24243e !important;
+    background-color: #014f86 !important;
 }
 
 .dark-theme a.bg-light:hover,
@@ -3107,7 +3107,7 @@
 
 .dark-theme .main-footer {
     background-color: #012a4a;
-    border-top: 1px solid rgb(1 42 74);
+    border-top: 1px solid #eeeeee2e;
 }
 
 .dark-theme .main-table-reference {

@@ -24,7 +24,7 @@
           <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
     </head>
-    <body class="horizontalmenu dark-theme">
+    <body class="horizontalmenu">
         <div class="page">
             <!-- Main Header-->
             <div class="main-header side-header">
@@ -57,15 +57,23 @@
                                 <a href="" class="nav-link">FAQ</a>
                             </li>
                         </ul>
-                        <a href="{{route('connect.wallet')}}" class="btn btn-primary">Connect Wallet</a>
+                        {{-- connect wallet for desktop --}}
+                        <a href="{{route('connect.wallet')}}" class="btn btn-primary btn-sm connect__wallet--desktop rounded-pill">Connect Wallet</a>
+                        {{-- ./ connect wallet for desktop --}}
 
                         {{-- if authenicated --}}
-                        {{-- <a href="{{route('user.profile')}}" class="nav-link font-weight-bolder">
+                        <a href="{{route('user.profile')}}" class="nav-link font-weight-bolder">
                             <i class="fe fe-user"></i>
                             Jane
-                        </a> --}}
+                        </a>
                         {{-- if authenicated --}}
 
+                        <div class="ml-3" id="dark-mode-toggle">
+                            <i class="fe fe-moon"></i>
+                        </div>
+                        {{-- <div class="main-toggle ml-2">
+                            <span></span>
+                        </div> --}}
                         <button class="navbar-toggler navresponsive-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
                             aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fe fe-more-vertical header-icons navbar-toggler-icon"></i>
@@ -180,6 +188,32 @@
             $(document).ready(function() {
                 $(function () {
                     $('[data-toggle="tooltip"]').tooltip()
+                })
+                	// Toggle Switches
+
+                let darkMode = localStorage.getItem('mode');
+                const darkModeToggle = document.querySelector('#dark-mode-toggle')
+                const enableDarkMode = () => {
+                    document.body.classList.add('dark-theme');
+                    localStorage.setItem('mode', 'enabled');
+                }
+
+                const disableDarkMode = () => {
+                    document.body.classList.remove('dark-theme');
+                    localStorage.setItem('mode', null);
+                }
+
+                if(darkMode == 'enabled') {
+                    enableDarkMode();
+                }
+
+                darkModeToggle.addEventListener('click', () => {
+                    darkMode = localStorage.getItem('mode'); 
+                    if (darkMode !== 'enabled') {
+                        enableDarkMode();
+                    } else {  
+                        disableDarkMode(); 
+                    }
                 })
             })
         </script>

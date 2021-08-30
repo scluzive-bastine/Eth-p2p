@@ -425,8 +425,8 @@ pre {
 }
 
 .accordion .card-header a {
-    color: #014f86;
-    background-color: #e1e1f9;
+    color: #fff;
+    background-color: #014f86;
 }
 
 .accordion-color .card-header a.collapsed {
