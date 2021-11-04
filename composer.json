@@ -9,8 +9,13 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "inertiajs/inertia-laravel": "^0.4.5",
         "laravel/framework": "^8.40",
-        "laravel/tinker": "^2.5"
+        "laravel/sanctum": "^2.12",
+        "laravel/tinker": "^2.5",
+        "psychob/ethereum-address-validator": "^1.1",
+        "simplito/elliptic-php": "^1.0",
+        "tightenco/ziggy": "^1.4"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -30,7 +35,10 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "app/Http/Helpers.php"
+        ]        
     },
     "scripts": {
         "post-autoload-dump": [

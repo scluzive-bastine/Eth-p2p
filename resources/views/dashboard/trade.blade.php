@@ -1,4 +1,4 @@
-@extends('app')
+@extends('home')
 
 @section('content')
     <div class="container mt-5 pt-5">

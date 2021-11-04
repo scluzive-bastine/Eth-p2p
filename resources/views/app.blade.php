@@ -3,26 +3,31 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{csrf_token()}}">
         <title>ETH P2P</title>
         <link rel="stylesheet" href="{{asset('/css/bootstrap/bootstrap.min.css')}}">
         <link rel="stylesheet" href="{{asset('/fonts/icons.css')}}">
         <link rel="stylesheet" href="{{asset('/fonts/plugin.css')}}">
-
         <link rel="stylesheet" href="{{asset('/fonts/font-awesome/font-awesome.min.css')}}">
         <link rel="stylesheet" href="{{asset('/css/style.css')}}">
         <link rel="stylesheet" href="{{asset('/css/skins.css')}}">
         <link rel="stylesheet" href="{{asset('/css/dark-style.css')}}">
         <link rel="stylesheet" href="{{asset('/css/colors/default.css')}}">
-
         <link rel="stylesheet" href="{{asset('/css/colors/color.css')}}">
         <link rel="stylesheet" href="{{asset('/css/sidemenu.css')}}">
         <link rel="stylesheet" href="{{asset('/css/owl-carousel.min.css')}}">
         <link rel="stylesheet" href="{{asset('/css/icon-list.css')}}">
         <link rel="stylesheet" href="{{asset('/css/select2.min.css')}}">
-
-
-          <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+        <script>
+            function get_loader(m)
+            {
+                m = m == null | m == undefined ? '' : m;
+                var loader = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> '+m;
+                return loader;
+            }
+        </script>
+        @routes
     </head>
     <body class="horizontalmenu">
         <div class="page">
@@ -57,16 +62,17 @@
                                 <a href="" class="nav-link">FAQ</a>
                             </li>
                         </ul>
-                        {{-- connect wallet for desktop --}}
+                        @guest
                         <a href="{{route('connect.wallet')}}" class="btn btn-primary btn-sm connect__wallet--desktop rounded-pill">Connect Wallet</a>
-                        {{-- ./ connect wallet for desktop --}}
+                        @endguest
 
-                        {{-- if authenicated --}}
-                        <a href="{{route('user.profile')}}" class="nav-link font-weight-bolder">
+                        @auth
+                        <a href="#" id="discon" class="btn btn-primary btn-sm connect__wallet--desktop rounded-pill">Disconnect</a>
+                        <a href="{{route('profile.index')}}" class="nav-link font-weight-bolder">
                             <i class="fe fe-user"></i>
-                            Jane
+                            {{Auth::user()->username}}
                         </a>
-                        {{-- if authenicated --}}
+                        @endauth
 
                         <div class="ml-3" id="dark-mode-toggle">
                             <i class="fe fe-moon"></i>
@@ -85,7 +91,7 @@
 
             <!-- Mobile-header -->
             <div class="mobile-main-header">
-                <div class="mb-1 navbar navbar-expand-lg  nav nav-item  navbar-nav-right responsive-navbar navbar-dark  ">
+                <div class="mb-1 navbar navbar-expand-lg  nav nav-item  navbar-nav-right responsive-navbar navbar-dark">
                     <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
                         <ul class="nav d-block text-right">
                             <li class="nav-item">
@@ -113,13 +119,11 @@
 
             {{-- Main content --}}
             <div class="main-content pt-0">
-                {{-- <div class="container-fluid"> --}}
-                    @yield('content')
-                {{-- </div> --}}
+                   @inertia
             </div>
             {{-- Main content --}}
 
-            {{-- footer --}}
+    
             <div class="main-footer mt-5">
                 <div class="container">
                     <div class="row justify-content-center">
@@ -165,8 +169,7 @@
             </div>
         </div>
 
-            <a href="#top" id="back-to-top"><i class="fe fe-arrow-up"></i></a>
-
+        <a href="#top" id="back-to-top"><i class="fe fe-arrow-up"></i></a>
         <script src="{{asset('/js/jquery.min.js')}}"></script>
         <script src="{{asset('/js/popper.min.js')}}"></script>
         <script src="{{asset('/js/bootstrap.min.js')}}"></script>
@@ -178,19 +181,12 @@
         <script src="{{asset('/js/clipboard/clipboard.min.js')}}"></script>
         <script src="{{asset('/js/clipboard/clipboard.js')}}"></script>
         <script src="{{asset('/js/crypto-dashboard.js')}}"></script>
-
-        {{-- <script src="{{asset('/js/sticky.js')}}"></script> --}}
-        {{-- for dashboard --}}
         <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-
-        @stack('scripts')
         <script>
             $(document).ready(function() {
                 $(function () {
                     $('[data-toggle="tooltip"]').tooltip()
                 })
-                	// Toggle Switches
-
                 let darkMode = localStorage.getItem('mode');
                 const darkModeToggle = document.querySelector('#dark-mode-toggle')
                 const enableDarkMode = () => {
@@ -215,7 +211,28 @@
                         disableDarkMode(); 
                     }
                 })
-            })
+                @auth
+                    $("#discon").click(function(){
+                        var $ele = $(this);
+                        $ele.data('text',$ele.text());
+                        $ele.html(get_loader('disconnecting'));
+                        $ele.prop('disabled',true);
+                        $.ajax({
+                            type:"POST",
+                            url:route('sign_out'),
+                            data:{'_token':"{{csrf_token()}}" },
+                            success:function(data){
+                                if(data)window.location.reload();
+                            },
+                            error:function(){
+                                $ele.prop('disabled',false);
+                                $ele.text($ele.data('text'));
+                            }
+                        });
+                    });
+                @endauth
+            });
         </script>
+        <script src="{{ mix('/js/app.js') }}"></script>
     </body>
 </html>

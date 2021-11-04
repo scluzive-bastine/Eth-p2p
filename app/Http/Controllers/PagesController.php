@@ -1,38 +1,37 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PagesController extends Controller
-{
+{ 
     public function index()
-    {
-        return view('pages.index');
+    { 
+        return view('welcome');
     }
 
     public function connectWallet()
     {
-        return view('pages.connect-wallet');
+        return Inertia::render('Login');
     }
 
     public function marketPlace()
     {
-        return view('dashboard.market-place');
+        return Inertia::render('Market');
     }
 
     public function profile()
     {
-        return view('dashboard.profile');
+        return Inertia::render('Profile');
     }
-
+    
     public function openTrade()
     {
-        return view('dashboard.trade');
+        return Inertia::render('Trade');
     }
 
     public function paymentPage()
     {
-        return view('dashboard.payment');
+        return Inertia::render('Payment');
     }
 }
