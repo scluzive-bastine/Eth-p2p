@@ -3,29 +3,52 @@
         <div class="row justify-content-center">
             <div class="col-12 col-sm-12 col-md-5 col-lg-4">
                 <div class="custom__trade--card shadow">
-                    <h3>Sell ETH to <span>Bash</span> </h3>
-                    <form action="">
+                    
+                    <h3 v-if="type == 'sell'"> Sell {{coin}} to {{name}} </h3>
+
+                    <h3 v-else> Buy {{coin}} from {{name}} </h3>
+
+                    <form @submit.prevent="submitTrade" id="submitTradeForm">
                         <div class="form-group mt-3">
                             <div class="d-flex justify-content-between">
                                 <h6>Trade amount</h6>
-                                <h6>₦100k - ₦200M</h6>
+
+                                <h6 v-if="type == 'sell' ">{{cur}}{{min.toLocaleString()}} - {{cur}}{{max.toLocaleString()}}</h6>
+                                <h6 v-else>{{cur}}{{min.toLocaleString()}} - {{cur}}{{max.toLocaleString()}}</h6>
                             </div>
-                            <input type="text" placeholder="NGN" class="form-control">
+
+                            
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" >
+                                        {{cur}}
+                                    </span>
+                                </div>
+                                <input aria-describedby="basic-addon1" required name="fiat" id="fiat" aria-label="coin" class="form-control border-left-0" placeholder="0" type="text">
+                            </div>
                         </div> 
                         <div class="form-group mt-3">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text pl-3 pr-0" id="basic-addon1">
-                                        <img src="/img/coins/eth.svg" alt="" width="15">
+                                    <span class="input-group-text" >
+                                        <!-- <img src="/img/coins/eth.svg" alt="" width="15"> -->
+                                        {{coin}}
                                     </span>
                                 </div>
-                                <input aria-describedby="basic-addon1" aria-label="coin" class="form-control border-left-0" placeholder="0.00000" type="text">
+                                <input aria-describedby="basic-addon1" required name="coin" id="coin"  aria-label="coin" class="form-control border-left-0" placeholder="0.00000" type="text">
                             </div>
                         </div> 
+                        <div class="form-group" v-if="type == 'buy'">
+                            <label for="address">Enter recipient {{coin}} address</label>
+                            <input type="text" name="address" class="form-control" :placeholder="'Enter a valid '+coin+' address'" required>
+                        </div>
                         <div class="form-group">
-                            <textarea class="form-control" name="" id="" cols="30" rows="5" placeholder="message"></textarea>
+                            <textarea class="form-control" name="message" id="" cols="30" rows="5" placeholder="message"></textarea>
                         </div> 
-                        <a href="{{route('payment')}}" class="btn btn-primary">Initate trade</a>
+                        <div id="formMsg"></div> 
+                        <div class="text-center"> 
+                            <button class="btn btn-primary">Initate trade</button>
+                        </div> 
                     </form>
                     <hr>
                     <p>
@@ -43,7 +66,8 @@
                             <div class="d-flex align-items-center tFIRST">
                                 <img src="/img/profile/avatar-1.jpg" class="img-fluid rounded-pill trader__profile--image" alt="">
                                 <div>
-                                    <h5 class="ml-3">@Jane is the seller</h5>
+                                    <h5  class="ml-3">@{{type == 'sell' ? 'You are': name+' is'}} the seller</h5>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -51,22 +75,28 @@
                             <div class="d-flex align-items-center">
                                 <img src="/img/profile/avatar-2.jpg" class="img-fluid rounded-pill trader__profile--image" alt="">
                                 <div class="ml-2">
-                                    <h5 class="mb-1"> <span>@Bash</span> is the buyer</h5>
+                                    <h5 class="mb-1"> <span>@{{type == 'buy'? 'You are': name+' is'}}</span>  the buyer</h5>
                                     <p class="mb-0">
-                                            and transfer money from their account to your bank account. 
+                                            <!-- and will transfer money from their account to your bank account.  -->
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="mt-5 mb-5 d-flex align-items-center justify-content-center">
-                    <div>
+               
+                <div class=" justify-content-center">
+                    <br>
+                     <h4 class="text-center">{{type == 'buy' ? 'Seller\'s': 'Buyer\'s'}} Rate</h4> 
+                      <h4 class="text-center">@ {{cur}}{{Number(trader_price).toFixed(2).toLocaleString()}} Per USD </h4> 
+                    <!-- <div>
                         <img src="/img/coins/eth.svg" alt="">
-                    </div>
-                    <h3 class="ml-3">1 ETH = ₦1,107,169.81</h3>
+                    </div> -->
+                    <h3 class="ml-3 text-center">1 {{coin}} = {{cur}}{{rate.toLocaleString()}}</h3>
+
                 </div>
-                <div class="custom__trade--card shadow">
+
+                <!-- <div class="custom__trade--card shadow">
                     <div class="row justify-content-center align-items-center">
                         <div class="col-12 col-sm-12 col-md-12 col-lg-5">
                             <div>
@@ -109,12 +139,13 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
+
+
                 <div class="custom__trade--card shadow mt-4">
                     <h6>Terms of trade</h6>
                     <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                       {{terms}}
                     </p>
                 </div>
             </div>
@@ -124,14 +155,43 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-    setup() {
-        
+    props:['type', 'min', 'max', 'name', 'cur', 'price', 'coin', 'rate', 'terms', 'trader_price', 'id'],
+
+    data(){
+        return {
+
+        }
+    },
+    methods:{
+        submitTrade(){
+            let form = $("#submitTradeForm");
+            let msg = $("#formMsg");
+            let data = form.serialize();
+            data = data+'&id='+this.id+'&type='+this.type
+           
+            axios.post(route('market.initiateTrade'), data).then(response=>{
+                let result = response.data;
+                console.log(result);
+            }).catch(error=>{
+                msg.html("<div class='alert alert-danger'><i class='fas fa-info-circle'></i> "+error.message+"</div>");
+            });
+        }
     },
     mounted(){
+        let price = this.rate;
+        $("#fiat").on('keyup', function(){
+            let value = $(this).val();
+            $("#coin").val( (value/price).toFixed(8)  );
+        });
 
+        $("#coin").on('keyup', function(){
+            let value = $(this).val();
+            $("#fiat").val( (value*price).toFixed(2) ); 
+        });
     }
 });
 </script>

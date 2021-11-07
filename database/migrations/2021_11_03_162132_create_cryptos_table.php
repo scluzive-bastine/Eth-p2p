@@ -19,6 +19,8 @@ class CreateCryptosTable extends Migration
             $table->string('symbol');
             $table->decimal('fee', 20, 2);
             $table->decimal('profit', 65, 8)->default(0);
+            $table->decimal('price', 65, 8)->default(0);
+            $table->decimal('min');
             $table->timestamps();
         });
     }

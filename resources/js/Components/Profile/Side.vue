@@ -33,9 +33,9 @@
             </div>
             <br>
             <br>
-            <Link :href="route('market.buy')"  class="btn btn-sm  btn-success">Trade</Link>
+            <Link :href="route('market.buy')"  class="btn btn-sm  btn-primary">Trade</Link>
             &nbsp;
-            <Link :href="route('market.buy_order')"  class="btn btn-sm btn-success">Create Order</Link>
+            <Link :href="route('market.buy_order')"  class="btn btn-sm btn-primary">Orders</Link>
         </div>
         <hr>
         <div class="row justify-content-center">

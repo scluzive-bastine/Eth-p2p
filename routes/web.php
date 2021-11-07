@@ -26,10 +26,37 @@ Route::get('/market/buy-orders', [MarketController::class, 'buyOrder'])->name('m
 Route::get('/market/sell-orders', [MarketController::class, 'sellOrder'])->name('market.sell_order');
 Route::get('/yZWtEdK340LB', [MarketController::class, 'getCurrencyList'])->name('market.currencyList');
 Route::post('/RCDR2HxEhnrT', [MarketController::class, 'createBuyOrder'])->name('market.createBuyOrder');
+Route::post('/A8RXXGZDZlnC', [MarketController::class, 'updateBuyOrder'])->name('market.updateBuyOrder');
 
-Route::get('/trade', [PagesController::class, 'openTrade'])->name('trade');
+Route::post('/Nm1VXp7Ag3gB', [MarketController::class, 'createSellOrder'])->name('market.createSellOrder');
+Route::post('/hAyuQyEj7bib', [MarketController::class, 'updateSellOrder'])->name('market.updateSellOrder');
+Route::delete('/j8Fg9MZlv0d8/{id}', [MarketController::class, 'deleteSellOrder'])->name('market.deleteSellOrder');
+Route::delete('/WpJSLDfizhfC/{id}', [MarketController::class, 'deleteBuyOrder'])->name('market.deleteBuyOrder');
 
-Route::get('/payment', [PagesController::class, 'paymentPage'])->name('payment');
+Route::get('/GUBgwNqrTHej', [MarketController::class, 'loadMoreBuyOrders'])->name('market.loadMoreBuyOrders');
+Route::get('/A3KrD2G8nyZY', [MarketController::class, 'loadMoreSellOrders'])->name('market.loadMoreSellOrders');
+
+#filter
+Route::post('/filter/buy', [MarketController::class, 'filterBuyers'])->name('market.filterBuyers');
+Route::post('/filter/sell', [MarketController::class, 'filterSellers'])->name('market.filterSellers');
+
+
+
+
+Route::post('/CiJZ2ZHdwVNU', [MarketController::class, 'confirmBuy'])->name('market.confirm_buy');
+Route::post('/KTus7PTlWJFQ', [MarketController::class,  'confirmSell'])->name('market.confirm_sell');
+
+#initiate trade
+Route::post('/MVziqhb20YFj', [MarketController::class, 'initiateTrade'])->name('market.initiateTrade');
+
+
+
+Route::get('/trade/buy/{id}', [MarketController::class, 'openBuyTrade'])->name('market.openBuyTrade');
+
+Route::get('/trade/sell/{id}', [MarketController::class, 'openSellTrade'])->name('market.openSellTrade');
+
+
+Route::get('/payment/{id}', [MarketController::class, 'payment'])->name('market.payment');
 
 
 

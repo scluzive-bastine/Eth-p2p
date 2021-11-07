@@ -1,13 +1,20 @@
-<?php 
+<?php
 use App\Models\User;
 use App\Models\Crypto;
 use Elliptic\EC;
 use kornrunner\Keccak;
 
+function tableNumber( int $total ) : int
+{
+    if( request()->page && request()->page != 1 )
+        return ( request()->page*$total ) - $total + 1;
+    return 1;
+}
+
 /**
 * Generate Email Verification token
 *
-* @return String 
+* @return String
 */
 function generateNounce()
 {
@@ -18,21 +25,21 @@ function generateNounce()
     return $token;
 }
 
-function pubKeyToAddress($pubkey) 
+function pubKeyToAddress($pubkey)
 {
     return "0x" . substr(Keccak::hash(substr(hex2bin($pubkey->encode("hex")), 1), 256), 24);
 }
 
-function verifySignature($message, $signature, $address) 
+function verifySignature($message, $signature, $address)
 {
     $msglen = strlen($message);
     $hash   = Keccak::hash("\x19Ethereum Signed Message:\n{$msglen}{$message}", 256);
-    $sign   = ["r" => substr($signature, 2, 64), 
+    $sign   = ["r" => substr($signature, 2, 64),
                "s" => substr($signature, 66, 64)];
 
-    $recid  = ord(hex2bin(substr($signature, 130, 2))) - 27; 
+    $recid  = ord(hex2bin(substr($signature, 130, 2))) - 27;
 
-    if ($recid != ($recid & 1)) 
+    if ($recid != ($recid & 1))
         return false;
 
     $ec = new EC('secp256k1');
@@ -46,12 +53,17 @@ function cryptoExists($symbol)
     return Crypto::where('symbol', $symbol)->exists();
 }
 
-function currencyExists($symbol)
+function currencyExists($symbol): bool
 {
     $lists = config('currencies');
-    foreach( $lists as $key=>$value ){
-        if($symbol == $key)
-            return true;
-    }
+    if( isset($lists[$symbol])  )
+        return true;
+
     return false;
+}
+
+function convertToFiat($coin, $qt, $fiatPrice)
+{
+    $coin = Crypto::where('symbol', $coin)->first();
+    return $coin->price * $qt * $fiatPrice;
 }

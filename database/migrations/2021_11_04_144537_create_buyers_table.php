@@ -15,9 +15,13 @@ class CreateBuyersTable extends Migration
         Schema::create('buyers', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->decimal('balance', 65, 8)->default(0);
+            $table->decimal('amount', 65, 8);
+            $table->decimal('balance', 65, 8);
+            $table->decimal('price', 65, 4);
+            $table->decimal('min', 65, 8);
             $table->string('coin');
             $table->string('currency');
+            $table->string('address');
             $table->timestamps();
         });
     }
