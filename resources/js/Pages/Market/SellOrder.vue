@@ -2,7 +2,7 @@
     <div class="container mt-5 pt-5">
         <div class="row justify-content-center">
             <div class="col-12 col-sm-12 col-md-5 col-lg-4">
-                <div class="custom__trade--card shadow">
+                <div class="custom__trade--card shadow" id="showTheAddress">
                     <form id="sellOrderForm" @submit.prevent="createSellOrder">
                         <div class="btn-group btn-block mb-3" role="group" aria-label="buy-sell">
                             <Link :href="route('market.buy_order')" class="btn btn-secondary btn-lg">Buy</Link>
@@ -99,16 +99,17 @@ export default defineComponent({
             btn.prop('disabled',true);
 
             msg.html("");
-
+ 
             axios.post(route('market.createSellOrder'), form.serialize())
             .then(result=>{
                 let data = result.data;
-            
+                console.log(data);
                 if(data.success){
-                    msg.html("<div class='alert alert-success'><i class='fas fa-check-circle'></i> Order Created</div>");
-                    setTimeout(function(){
-                        window.location.reload();
-                    }, 2000);
+                    $('#showTheAddress').html(data.success);
+                    // msg.html("<div class='alert alert-success'><i class='fas fa-check-circle'></i> Order Created</div>");
+                    // setTimeout(function(){
+                    //     window.location.reload();
+                    // }, 2000);
 
                 }else if(data.error){
                     msg.html("<div class='alert alert-danger'><i class='fas fa-info-circle'></i> "+data.error+"</div>");

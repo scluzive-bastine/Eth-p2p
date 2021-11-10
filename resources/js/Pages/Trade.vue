@@ -47,7 +47,7 @@
                         </div> 
                         <div id="formMsg"></div> 
                         <div class="text-center"> 
-                            <button class="btn btn-primary">Initate trade</button>
+                            <button id="formBtn" class="btn btn-primary">Initate trade</button>
                         </div> 
                     </form>
                     <hr>
@@ -171,12 +171,27 @@ export default defineComponent({
             let form = $("#submitTradeForm");
             let msg = $("#formMsg");
             let data = form.serialize();
+            let btn = $("#formBtn");
+
+            btn.data('text',btn.text());
+            btn.html(get_loader(''));
+            btn.prop('disabled',true);
+            msg.html("");
+
             data = data+'&id='+this.id+'&type='+this.type
-           
             axios.post(route('market.initiateTrade'), data).then(response=>{
-                let result = response.data;
-                console.log(result);
+                let data = response.data;
+                if(data.success){ 
+                    btn.text(btn.data('text'));
+                    window.location.href = window.route('market.payment', data.success);
+                }else if(data.error){
+                    msg.html("<div class='alert alert-danger'><i class='fas fa-info-circle'></i> "+data.error+"</div>");
+                    btn.prop('disabled',false);
+                    btn.text(btn.data('text'));
+                }
             }).catch(error=>{
+                btn.prop('disabled',false);
+                btn.text(btn.data('text'));
                 msg.html("<div class='alert alert-danger'><i class='fas fa-info-circle'></i> "+error.message+"</div>");
             });
         }

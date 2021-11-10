@@ -18,7 +18,12 @@ class CreateTradesTable extends Migration
             $table->string('coin');
             $table->decimal('amount', 65, 8);
             $table->string('buyer_address');
-            $table->boolean('status')->default(0); //from 1 to 4; 3 = sent, 4 = network_confirmed 5 = issue
+            $table->string('bank_name');
+            $table->string('bank_account_name');
+            $table->string('bank_account_number');
+            $table->decimal('price', 65,2);
+            $table->boolean('status')->default(0); //1 = buyer paid, 2 = seller confirmed, 3 = sent, 4 = confirmed
+            $table->string('trx_hash', 500)->nullable();
             $table->timestamps();
         });
     }

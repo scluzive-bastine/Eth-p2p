@@ -1,5 +1,5 @@
 <template>
-        <div class="container mt-5 pt-5">
+    <div class="container mt-5 pt-5">
         <div class="row justify-content-center">
             <div class="col-12 col-sm-12 col-md-5 col-lg-4">
                 <div class="custom__trade--card shadow">
@@ -62,10 +62,11 @@
                         </div>
                         <div class="col-12 col-sm-12 col-md-8 col-lg-8 d-flex align-items-center">
                             <div>
-                                <h6 class="mb-1">Waiting for the seller</h6>
+                                <h6 class="mb-1" v-if="trade.status == 0">Waiting for the Buyer</h6>
+                                <h6 class="mb-1" v-if="trade.status == 1">Waiting for the Seller</h6>
+
                                 <p>
-                                    Don’t pay the seller until they put ETH in escrow.
-                                    once ETH has been locked, this status will change
+                                    Don’t pay the seller until they put <b>{{trade.coin}}</b> in escrow.
                                 </p>
                             </div>
                         </div>
@@ -76,15 +77,15 @@
                             <div class="row justify-content-center">
                                 <div class="col-12 col-sm-12 col-md-4">
                                     <div class="payment__status--icon">
-                                        <div class="status__icon bg-success ml-auto mr-auto">
+                                        <div class="status__icon ml-auto mr-auto bg-success">
                                             <i class="fe fe-check"></i>
                                         </div>
-                                        <h6 class="text-center mt-2">ETH Locked on escrow</h6>
+                                        <h6 class="text-center mt-2"><b>{{trade.coin}}</b> Locked on escrow</h6>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-12 col-md-4">
                                     <div class="payment__status--icon psYSICON">
-                                        <div class="status__icon ml-auto mr-auto">
+                                        <div class="status__icon ml-auto mr-auto" :class="trade.status > 1 ? 'bg-success' : '' ">
                                             <i class="fe fe-check"></i>
                                         </div>
                                         <h6 class="text-center mt-2">Buyer pays seller directly</h6>
@@ -92,7 +93,7 @@
                                 </div>
                                 <div class="col-12 col-sm-12 col-md-4">
                                     <div class="payment__status--icon">
-                                        <div class="status__icon ml-auto mr-auto">
+                                        <div class="status__icon ml-auto mr-auto" :class="trade.status > 2 ? 'bg-success' : '' ">
                                             <i class="fe fe-check"></i>
                                         </div>
                                         <h6 class="text-center mt-2">Escrow is released</h6>
@@ -102,21 +103,50 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="custom__trade--card shadow mt-5">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h5 class="mb-1">Buying</h5>
-                            <h6 class="mb-1">0.007212 <span>ETH</span> </h6>
-                            <h6 class="mb-1">For</h6>
-                            <h6 class="mb-1">₦100,000</h6>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <button class="btn btn-danger">Cancel trade</button>
+                    <div class="justify-content-between">
+                        <h6><b>Contact {{user.id == buyer.user_id ? "Seller": "Buyer"}}</b></h6>
+                        <div>Name: {{user.id == buyer.user_id ? seller.name : buyer.name}}</div>
+                        <div>Phone: {{user.id == buyer.user_id ? seller.phone : buyer.phone}} </div>
+                    </div>
+                    <div class="text-center text-danger">
+                        <b><i class="fas fa-info-circle"></i>For your own safety do not trade outside vendex.</b>
+                    </div>
+                </div> 
+
+                <div class="custom__trade--card shadow mt-5">
+                    <div class="justify-content-between">
+                        <div class="text-center">
+                            {{user.id == buyer.user_id ? "Buying" : "Selling" }}
+                            <b>{{trade.amount}} {{trade.coin}}</b>
+                            For
+                            <b>{{trade.cur_symbol}}{{trade.fiat}}</b>
                         </div>
                     </div>
-                    <hr>
+
+
+
+                    <div class="justify-content-between">
+                        <h6><b>{{user.id == seller.user_id? "Your": "Seller's"}} Bank Details</b></h6>
+                        <div>Bank Name: {{trade.bank_name}}</div> 
+                        <div>Account Name: {{trade.bank_account_name}}</div> 
+                        <div>Account Number: {{trade.bank_account_number}}</div> 
+                    </div> 
+                    
+                    <br>
+                    <p v-if="user.id == buyer.user_id" class="text-center">Send <b>{{trade.cur_symbol}}{{trade.fiat}}</b> to the seller's bank account above.</p> 
+                    <p v-if="user.id == seller.user_id" class="text-center">Be on the lookout for <b>{{trade.cur_symbol}}{{trade.fiat}}</b> into your bank account above.</p> 
+
+                    <button id="cSent"      @click="confirmCashSent" v-if="user.id == buyer.user_id"  :disabled="trade.status != 0? true: false" class="btn btn-sm btn-primary">I've sent cash</button> &nbsp;
+                    <button id="cReceived"  @click="confirmCashReceived" v-if="user.id == seller.user_id" :disabled="trade.status != 1? true: false" class="btn btn-sm btn-primary">I've received cash</button> &nbsp;
+                    <button id="cancelBtn"  @click="cancelTrade" v-if="user.id == buyer.user_id"  :disabled="trade.status != 0 ? true: false" class="btn btn-sm btn-danger">Cancel Trade</button> &nbsp;
+                    <button data-toggle="modal" data-target="#openIssues"  class="btn btn-sm btn-warning" :disabled="trade.status >= 2 ? true: false">Open Dispute</button>
+                </div> 
+
+                <div class="custom__trade--card shadow mt-5">
                     <div>
-                        <h5 class="mb-1">Locked amount: <span>0.0730230121 ETH</span></h5>
+                        <h5 class="mb-1">Locked amount: <span>{{trade.amount}} {{trade.coin}}</span></h5>
                         <h5 class="mb-1">Predicted network fee: <span>0.000058 ETH</span></h5>
                         <p class="mt-4">
                             NOTE: After the escrow is complete, network fees will be deducted from the
@@ -171,14 +201,153 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" id="openIssues">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-body">
+                    <h4 class="mb-1">Open a Dispute</h4>
+                    <form class="mt-3" id="disputeForm" @submit.prevent="openDispute">
+                        <div class="form-group">
+                            <textarea name="msg" id="msgValue" placeholder="What's the issue" required cols="30" rows="5" class="form-control"></textarea>
+                        </div>
+                        <input type="hidden" name="id" :value="trade.id">
+                        <div id="dsFormMsg"></div> 
+                        <div class="d-flex">
+                            <button class="btn ripple btn-primary" id="disputBtn">Create</button>
+                            <button class="btn ripple btn-secondary ml-2" data-dismiss="modal" type="button">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
+import axios from 'axios';
 import { defineComponent } from 'vue';
-
+import {alertUser} from '../Helpers/utility';
 export default defineComponent({
-    setup() {
-        
+    props:['trade', 'buyer', 'seller', 'user'],
+    methods:{
+        confirmCashSent(){
+
+            if( this.buyer.user_id == this.user.id ){
+                let btn = $('#cSent');
+                let confirm = window.confirm("Have you sent cash to the seller");
+                if(confirm){
+                    btn.data('text', btn.text());
+                    btn.html(get_loader(''));
+                    btn.prop('disabled', true);
+                    axios.post(route('market.confirm_cash_sent'), {
+                        id:this.trade.id,
+                        buyer:this.buyer.id
+                    }).then(response=>{
+                        let data = response.data;
+                        if(data.success){
+                            alertUser("success", "Confirmed");
+                            btn.text(btn.data('text'));   
+                        }else{
+                            alertUser("error", data.error);
+                            btn.prop('disabled',false);
+                            btn.text(btn.data('text'));
+                        }                        
+                    }).catch(error=>{
+                        alert(error.message);
+                        btn.prop('disabled',false);
+                        btn.text(btn.data('text'));
+                    });
+                }
+            }
+
+        },
+        confirmCashReceived(){
+
+            if( this.seller.user_id == this.user.id ){
+
+                let btn = $('#cReceived');
+                let confirm = window.confirm("I sure hope you know what you are doing");
+                if(confirm){
+                    btn.data('text', btn.text());
+                    btn.html(get_loader(''));
+                    btn.prop('disabled', true);
+                    axios.post(route('market.confirm_cash_received'),  {
+                        id:this.trade.id,
+                        seller:this.seller.id
+                    }).then(response=>{
+                        let data = response.data;
+                        if(data.success){
+                            alertUser("success", "Confirmed");
+                            btn.text(btn.data('text'));   
+                        }else{
+                            alertUser("error", data.error);
+                            btn.prop('disabled',false);
+                            btn.text(btn.data('text'));
+                        }
+                    }).catch(error=>{
+                        alert(error.message);
+                        btn.prop('disabled',false);
+                        btn.text(btn.data('text'));
+                    });
+                }
+            }
+        },
+        openDispute(){
+            let form = $("#disputeForm");
+            let btn =  $('#disputBtn');
+            let msg = $('#dsFormMsg');
+            btn.data('text', btn.text());
+            btn.html(get_loader(''));
+            btn.prop('disabled', true);
+
+            axios.post(route('market.openDispute'), form.serialize()).then(response=>{
+                let data = response.data;
+                if(data.success){
+                    msg.html("<div class='alert alert-success'> <i class='fas fa-check-circle'></i> "+data.success+"</div>");
+                    btn.text(btn.data('text'));
+                    $("#msgValue").val("");
+                }else if(data.error){
+                    msg.html("<div class='alert alert-danger'> <i class='fas fa-info-circle'></i> "+data.error+"</div>");
+                    btn.prop('disabled',false);
+                    btn.text(btn.data('text'));
+                }
+            }).catch(error=>{
+                msg.html("<div class='alert alert-danger'> <i class='fas fa-info-circle'></i> "+error.message+"</div>");
+                btn.prop('disabled',false);
+                btn.text(btn.data('text'));
+            });
+        },
+        cancelTrade(){
+            let btn = $('#cancelBtn');
+            let confirm = window.confirm("I sure hope you know what you are doing");
+            if(confirm){
+                btn.data('text', btn.text());
+                btn.html(get_loader(''));
+                btn.prop('disabled', true);
+                axios.post(route('market.cancelTrade'),  {
+                    id:this.trade.id,
+                    buyer:this.buyer.id
+                }).then(response=>{
+                    let data = response.data;
+                    if(data.success){
+                        alertUser("success", "Canceled");
+                        btn.text(btn.data('text'));   
+                    }else{
+                        alertUser("error", data.error);
+                        btn.prop('disabled',false);
+                        btn.text(btn.data('text'));
+                    }
+                }).catch(error=>{
+                    alert(error.message);
+                    btn.prop('disabled',false);
+                    btn.text(btn.data('text'));
+                });
+            }
+        }   
     },
+    mounted(){
+
+    }
 })
 </script>

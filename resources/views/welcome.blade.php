@@ -98,9 +98,9 @@
                     The best market place for your crypto buying and selling
                 </h1>
                 <h6 class="mt-3">We’ve got everything you need 👌</h6>
-                <a href="{{route('market')}}" class="btn btn-primary btn-lg mt-3">Market place <i class="fe fe-arrow-right"></i> </a>
+                <a href="{{route('market.index')}}" class="btn btn-primary btn-lg mt-3">Market place <i class="fe fe-arrow-right"></i> </a>
             </div>
-        </div>
+        </div> 
     </div>
     <div class="header-two d-none d-xl-block position-absolute">
         <img src="{{asset('/img/header-bg-2.svg')}}" alt="">
@@ -440,7 +440,7 @@
                     <h1 class="header-h1">
                         Start Trading
                     </h1>
-                    <a href="{{route('market')}}" class="btn btn-primary btn-lg mt-3">Market place <i class="fe fe-arrow-right"></i> </a>
+                    <a href="{{route('market.index')}}" class="btn btn-primary btn-lg mt-3">Market place <i class="fe fe-arrow-right"></i> </a>
                 </div>
             </div>
         </div>

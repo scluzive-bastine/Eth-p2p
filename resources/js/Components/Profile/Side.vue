@@ -15,7 +15,7 @@
             <div class="col-8 col-sm-8 col-md-8 col-lg-8 d-flex align-items-center">
                 <div>
                     <h3>
-                        ben {{username}}
+                        {{username}}
                         <small  data-placement="top" data-toggle="tooltip" title="Edit username">
                             <a class="modal-effect" data-effect="effect-scale" data-toggle="modal" href="#userNameModal">
                                 <i class="fe fe-edit-2"></i>
@@ -23,12 +23,12 @@
                         </small>
                     </h3>
                     <!-- <div>Reliable trader</div> -->
-                    <div>
+                    <!-- <div>
                         <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5.50895 0L0.928589 1.81818V4.54545C0.928589 7.06818 2.88287 9.42727 5.50895 10C8.13502 9.42727 10.0893 7.06818 10.0893 4.54545V1.81818L5.50895 0ZM4.49109 7.27273L2.45537 5.45455L3.17296 4.81364L4.49109 5.98636L7.84493 2.99091L8.56252 3.63636L4.49109 7.27273Z" fill="#009A49"/>
                         </svg>
                         Verified
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <br>
@@ -80,7 +80,7 @@
                     </h6>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <h6>Phone Number 
+                    <h6>Phone Number
                         <small data-placement="top" data-toggle="tooltip" title="Add Phone number">
                             <a class="modal-effect" data-effect="effect-scale" data-toggle="modal" href="#addPhone">
                                 <i class="fe fe-edit-2"></i>
@@ -94,6 +94,22 @@
                 </div>
             </div>
         </div>
+        <hr>
+        <div>
+            <h3>
+                Bank Details
+                <small data-placement="top" data-toggle="tooltip" title="Edit bank details">
+                    <a class="modal-effect" data-effect="effect-scale" data-toggle="modal" href="#bankDetails">
+                        <i class="fe fe-edit-2"></i>
+                    </a>
+                </small>
+            </h3>
+            <div>
+               <div>Bank Name: {{bank_name}}</div>
+               <div>Account Name: {{bank_account_name}}</div> 
+               <div>Account No: {{bank_account_number}}</div> 
+            </div>
+        </div>        
         <hr>
         <div>
             <h3>
@@ -140,12 +156,44 @@
                     <p>
                         Other traders can find you with your username
                     </p>
-                    <form action="" class="mt-3">
+                    <form id="updateNameForm" @submit.prevent="updateName" class="mt-3">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder=" 0x5571...e8faf9">
+                            <input type="text" name="name" :value="username" required class="form-control" placeholder="eg: John">
                         </div>
+                        <div id="updateNameFormMsg"></div> 
                         <div class="d-flex">
-                            <button class="btn ripple btn-primary" type="button">Update</button>
+                            <button class="btn ripple btn-primary" id="updateNameFormBtn">Update</button>
+                            <button class="btn ripple btn-secondary ml-2" data-dismiss="modal" type="button">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="bankDetails">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-body">
+                    <h4 class="mb-1">Bank Details</h4>
+                    <p>
+                        This will be visible to buyers
+                    </p>
+                    <form id="updateBankForm" @submit.prevent="updateBank" class="mt-3">
+
+                        <div class="form-group">
+                            <input type="text" name="bank_name" :value="bank_name" required class="form-control" placeholder="Bank Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="account_name" :value="bank_account_name" required class="form-control" placeholder="Account Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="account_number" :value="bank_account_number" required class="form-control" placeholder="Account Number">
+                        </div>
+
+                        <div id="updateBankFormMsg"></div> 
+                        <div class="d-flex">
+                            <button class="btn ripple btn-primary" id="updateBankFormBtn">Update</button>
                             <button class="btn ripple btn-secondary ml-2" data-dismiss="modal" type="button">Cancel</button>
                         </div>
                     </form>
@@ -162,12 +210,13 @@
                     <p>
                         Your email address is not public, only you can see it
                     </p>
-                    <form action="" class="mt-3">
+                    <form id="updateEmailForm" @submit.prevent="updateEmail" class="mt-3">
                         <div class="form-group">
-                            <input type="text" class="form-control">
+                            <input type="text" name="email" :value="email" class="form-control">
                         </div>
+                        <div id="updateEmailFormMsg"></div> 
                         <div class="d-flex">
-                            <button class="btn ripple btn-primary" type="button">Update</button>
+                            <button class="btn ripple btn-primary" id="updateEmailFormBtn">Update</button>
                             <button class="btn ripple btn-secondary ml-2" data-dismiss="modal" type="button">Cancel</button>
                         </div>
                     </form>
@@ -184,12 +233,13 @@
                     <p>
                         Your phone number is going to be public
                     </p>
-                    <form action="" class="mt-3">
+                    <form @submit.prevent="updatePhone" id="updatePhoneForm" class="mt-3">
                         <div class="form-group">
-                            <input type="text" class="form-control">
+                            <input type="text" name="no" :value="phone" class="form-control">
                         </div>
+                        <div id="updatePhoneMsg"></div> 
                         <div class="d-flex">
-                            <button class="btn ripple btn-primary" type="button">Update</button>
+                            <button class="btn ripple btn-primary" id="updatePhoneBtn">Update</button>
                             <button class="btn ripple btn-secondary ml-2" data-dismiss="modal" type="button">Cancel</button>
                         </div>
                     </form>
@@ -197,6 +247,7 @@
             </div>
         </div>
     </div>
+
 
     <div class="modal" id="blurbModal">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -243,7 +294,6 @@
             </div>
         </div>
     </div>
-   
 </template>
 
 <script>
@@ -258,11 +308,14 @@ export default defineComponent({
     },
     data(){
         return {
-            name:"",
+            username:"",
             email:"",
             blurb:"",
             terms:"",
-            phone:""
+            phone:"",
+            bank_name:"",
+            bank_account_name:"",
+            bank_account_number:""
         }
     },
     setup() {
@@ -273,48 +326,96 @@ export default defineComponent({
             let form = $("#tmForm");
             let btn = $("#tmUpbtn");
             let msg = $("#tmFormMsg");
-
-            btn.data('text',btn.text());
-            btn.html(get_loader(''));
-            btn.prop('disabled',true);
-
-            msg.html("");
-
-            axios.post(route('profile.update_terms'), form.serialize())
-            .then(result=>{
-                let data = result.data;
-                if(data.success){
-                    this.terms = data.terms;
-                    msg.html("<div class='alert alert-success'><i class='fas fa-check-circle'></i> Terms Updated</div>");
-                }else if(data.error){
-                    msg.html("<div class='alert alert-danger'><i class='fas fa-info-circle'></i> "+data.error+"</div>");
-                }
-                btn.prop('disabled',false);
-                btn.text(btn.data('text'));
-            })
-            .catch(error=>{
-                msg.html("<div class='alert alert-danger'><i class='fas fa-info-circle'></i> "+error.message+"</div>");
-                btn.prop('disabled',false);
-                btn.text(btn.data('text'));
-           });
+            let route = window.route('profile.update_terms');
+            this.updateSomeData(form, btn, msg, route);
         },
         updateBlurb(){
             let form = $("#blurbForm");
             let btn = $("#blurbUpBtn");
             let msg = $("#blurbFormMsg");
+            let route = window.route('profile.update_blurb');
+            this.updateSomeData(form, btn, msg, route);
+        },
+        updateEmail(){
+            let form = $("#updateEmailForm");
+            let btn = $("#updateEmailFormBtn");
+            let msg = $("#updateEmailFormMsg");
+            let route = window.route('profile.update_email');
+            this.updateSomeData(form, btn, msg, route);
+        },
+        updatePhone(){
+            let form = $("#updatePhoneForm");
+            let btn = $("#updatePhoneBtn");
+            let msg = $("#updatePhoneMsg");
+            let route = window.route('profile.update_phone');
+            this.updateSomeData(form, btn, msg, route);
+        },
+        updateName(){
+            let form = $("#updateNameForm");
+            let btn = $("#updateNameFormBtn");
+            let msg = $("#updateNameFormMsg");
+            let route = window.route('profile.update_name');
+            this.updateSomeData(form, btn, msg, route);
+        },
+        updateAvater(){
 
+        },
+        updateBank(){
+            let form = $("#updateBankForm");
+            let btn = $("#updateBankFormBtn");
+            let msg = $("#updateBankFormMsg");
+
+            btn.data('text',btn.text());
+            btn.html(get_loader(''));
+            btn.prop('disabled',true);
+            msg.html("");
+
+            axios.post(route('profile.update_bankDetails'), form.serialize())
+            .then(result=>{
+                let data = result.data;
+                if(data.success){
+                    msg.html("<div class='alert alert-success'><i class='fas fa-check-circle'></i>"+ data.success+"</div>");
+                    this.bank_name = data.bank_name;
+                    this.bank_account_name = data.account_name;
+                    this.bank_account_number = data.account_number;
+                }else if(data.error){
+                    msg.html("<div class='alert alert-danger'><i class='fas fa-info-circle'></i> "+data.error+"</div>");
+                }
+                
+                btn.prop('disabled',false);
+                btn.text(btn.data('text'));
+            })
+            .catch(error=>{
+                msg.html("<div class='alert alert-danger'><i class='fas fa-info-circle'></i> "+error.message+"</div>");
+                btn.prop('disabled',false);
+                btn.text(btn.data('text'));
+           });
+        },
+        updateSomeData(form, btn, msg, route){
             btn.data('text',btn.text());
             btn.html(get_loader(''));
             btn.prop('disabled',true);
 
             msg.html("");
 
-            axios.post(route('profile.update_blurb'), form.serialize())
+            axios.post(route, form.serialize())
             .then(result=>{
                 let data = result.data;
                 if(data.success){
-                    this.blurb = data.blurb;
-                    msg.html("<div class='alert alert-success'><i class='fas fa-check-circle'></i> Blurb Updated</div>");
+                    if(data.blurb){
+                        this.blurb = data.blurb;
+                    }else if(data.terms){
+                        this.terms = data.terms;
+                    }else if(data.phone){
+                        this.phone = data.phone;
+                    }else if(data.email){
+                        this.email = data.email;
+                    }else if(data.name){
+                        this.name = data.name;
+                    }else if(data.username){
+                        this.username = data.username;
+                    }
+                    msg.html("<div class='alert alert-success'><i class='fas fa-check-circle'></i>"+ data.success+"</div>");
                 }else if(data.error){
                     msg.html("<div class='alert alert-danger'><i class='fas fa-info-circle'></i> "+data.error+"</div>");
                 }
@@ -325,29 +426,21 @@ export default defineComponent({
                 msg.html("<div class='alert alert-danger'><i class='fas fa-info-circle'></i> "+error.message+"</div>");
                 btn.prop('disabled',false);
                 btn.text(btn.data('text'));
-           });
-        },
-        updateEmail(){
-
-        },
-        updatePhone(){
-
-        },
-        updateName(){
-
-        },
-        updateAvater(){
-
+           });            
         }
     },
     mounted(){
         axios.post(route('profile.getProfile')).then(result=>{
             let data = result.data;
             this.name = data.name;
+            this.username = data.username;
             this.email = data.email;
             this.blurb = data.blurb;
             this.terms = data.terms;
             this.phone = data.phone;
+            this.bank_account_name = data.bank_account_name;
+            this.bank_name = data.bank_name;
+            this.bank_account_number = data.bank_account_number;
         });
     }
 });

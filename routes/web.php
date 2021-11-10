@@ -13,10 +13,17 @@ Route::post('/3nbvszQo5tHv', [SignInController::class, 'getNounce'])->name('gen_
 Route::post('/mbONp52i8cbs', [SignInController::class, 'signUserIn'])->name('sign_in');
 Route::post('/iDUVJerVVIf2', [SignInController::class, 'signUserOut'])->name('sign_out');
 
+#Profile
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 Route::post('/jqyMuUT0JJ7T', [ProfileController::class, 'getProfile'])->name('profile.getProfile');
 Route::post('/xhFNZo8kWLn2', [ProfileController::class, 'updateTerms'])->name('profile.update_terms');
 Route::post('/GVqMvS7i6vZl', [ProfileController::class, 'updateBlurb'])->name('profile.update_blurb');
+Route::post('/JnsD1d7iL3Fu', [ProfileController::class, 'updatePhone'])->name('profile.update_phone');
+Route::post('/ZnjNiwZoJUcV', [ProfileController::class, 'updateName'])->name('profile.update_name');
+Route::post('/anLYLlswr2yP', [ProfileController::class, 'updateEmail'])->name('profile.update_email');
+Route::post('/UjnZDYOh1e76', [ProfileController::class, 'updateBankDetails'])->name('profile.update_bankDetails');
+
+
 
 
 Route::get('/market', [MarketController::class, 'index'])->name('market.index');
@@ -40,25 +47,26 @@ Route::get('/A3KrD2G8nyZY', [MarketController::class, 'loadMoreSellOrders'])->na
 Route::post('/filter/buy', [MarketController::class, 'filterBuyers'])->name('market.filterBuyers');
 Route::post('/filter/sell', [MarketController::class, 'filterSellers'])->name('market.filterSellers');
 
-
-
-
-Route::post('/CiJZ2ZHdwVNU', [MarketController::class, 'confirmBuy'])->name('market.confirm_buy');
-Route::post('/KTus7PTlWJFQ', [MarketController::class,  'confirmSell'])->name('market.confirm_sell');
-
 #initiate trade
 Route::post('/MVziqhb20YFj', [MarketController::class, 'initiateTrade'])->name('market.initiateTrade');
 
+
+#requests
+Route::get('/market/buy-request/{id}', [MarketController::class, 'showBuyers'])->name('market.buy_request');
+Route::get('/market/sell-request/{id}', [MarketController::class, 'showSellers'])->name('market.sell_request');
 
 
 Route::get('/trade/buy/{id}', [MarketController::class, 'openBuyTrade'])->name('market.openBuyTrade');
 
 Route::get('/trade/sell/{id}', [MarketController::class, 'openSellTrade'])->name('market.openSellTrade');
 
-
+#payments
 Route::get('/payment/{id}', [MarketController::class, 'payment'])->name('market.payment');
 
-
+Route::post('/CiJZ2ZHdwVNU', [MarketController::class, 'confirmCashSent'])->name('market.confirm_cash_sent');
+Route::post('/KTus7PTlWJFQ', [MarketController::class, 'confirmCashReceived'])->name('market.confirm_cash_received');
+Route::post('/RrbEhuf08Aaa', [MarketController::class, 'cancelTrade'])->name('market.cancelTrade');
+Route::post('/rWCP847N385k', [MarketController::class, 'openDispute'])->name('market.openDispute');
 
 Route::get('/test', function(){
     return view("test");

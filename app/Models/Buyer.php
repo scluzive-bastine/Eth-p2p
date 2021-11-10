@@ -16,6 +16,7 @@ class Buyer extends Model
         'amount',
         'balance',
         'price',
+        'min',
         'address'
     ];
 

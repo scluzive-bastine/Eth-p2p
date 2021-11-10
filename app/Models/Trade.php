@@ -13,6 +13,20 @@ class Trade extends Model
         'seller',
         'coin',
         'amount',
-        'buyer_address'
+        'buyer_address',
+        'bank_name',
+        'bank_account_name',
+        'bank_account_number',
+        'price'
     ];
+
+    public function theBuyer()
+    {
+        return $this->belongsTo(Buyer::class, 'buyer');
+    }
+
+    public function theSeller()
+    {
+        return $this->belongsTo(Seller::class, 'seller');
+    }
 }

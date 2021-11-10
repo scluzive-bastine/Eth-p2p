@@ -2,12 +2,16 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Request;
+use App\Sdk\BlockCypher;
 use Inertia\Inertia;
 use App\Models\Crypto;
 use App\Models\Buyer;
 use App\Models\Seller;
 use App\Models\Trade;
+use App\Models\Deposit;
+use App\Models\OpenIssue;
 use Inertia\Response;
 
 class MarketController extends Controller
@@ -147,7 +151,7 @@ class MarketController extends Controller
         return back();
     }
 
-    public function createSellOrder(Request $request): array
+    public function createSellOrder(Request $request)
     {
         $user = Auth::user();
         $currency = $request->input('currency');
@@ -163,7 +167,12 @@ class MarketController extends Controller
         if(!$crypto)
             return ["error"=>"Please select a valid crypto"];
 
-        Seller::create([
+        $newAddress = BlockCypher::generateAddress($coin);
+
+        if( !isset($newAddress['address']) )
+            return ["error"=>"Could not get an address at this time"];
+        
+        $seller = Seller::create([
             'user_id'=>$user->id,
             'amount'=>$amt,
             'price'=>$price,
@@ -173,8 +182,21 @@ class MarketController extends Controller
             'currency'=>$currency
         ]);
 
-        #supposed to return an escrow address
-        return ['success'=>"Order created"];
+        #creating an escrow address
+        $deposit = Deposit::create([
+            'seller_id'=>$seller->id,
+            'address'=>Crypt::encryptString($newAddress['address']),
+            'public'=>Crypt::encryptString($newAddress['public']),
+            'private'=>Crypt::encryptString($newAddress['private']),
+            'wif'=>Crypt::encryptString($newAddress['wif']),
+            'amt'=>$amt,
+            'coin'=>$coin
+        ]);
+
+        $address = $newAddress['address'];
+        
+        $view = view('show_address', compact('address', 'coin', 'amt'));
+        return ['success'=>"$view"];
     }
 
     public function  updateSellOrder(Request $request): array
@@ -324,17 +346,6 @@ class MarketController extends Controller
         ];
     }
 
-
-    public function confirmBuy(Request $request)
-    {
-
-    }
-
-    public function confirmSell(Request $request)
-    {
-
-    }
-
     public function openBuyTrade($id): Response
     {
         $user = Auth::user();
@@ -347,9 +358,13 @@ class MarketController extends Controller
         return $this->extractedTrade($seller, $type);
     }
 
-    public function openSellTrade($id): Response
+    public function openSellTrade($id)
     {
         $user = Auth::user();
+
+        if(!$user->bankDetails)
+            return ['error'=>"Update your bank details"];
+
         $buyer = Buyer::where([
             ['id', $id],
             ['balance', '>', 0],
@@ -366,6 +381,9 @@ class MarketController extends Controller
         $trader_id = $request->input('id');
         $coin_amt = $request->input('coin');
         $address = $request->input('address');
+        $message = $request->input('message');
+
+
         switch ($type){
             case 'buy':
                 $seller = Seller::where([
@@ -380,7 +398,7 @@ class MarketController extends Controller
                 if($seller->balance < $coin_amt)
                     return ["error"=>"Seller's quantity has reduced to $seller->balance $seller->coin"];
 
-                Buyer::create([
+                $buyer = Buyer::create([
                     'user_id'=>$user->id,
                     'amount'=>$coin_amt,
                     'balance'=>0,
@@ -391,12 +409,62 @@ class MarketController extends Controller
                     'address'=>$address
                 ]);
 
-                break;
-            case 'sell':
-                Seller::create([
-
+                #create trade
+                $trade = Trade::create([
+                    'buyer'=>$buyer->id,
+                    'seller'=>$seller->id,
+                    'coin'=>$seller->coin,
+                    'amount'=>$coin_amt,
+                    'buyer_address'=>$address,
+                    'bank_name'=>$seller->user->bankDetails->bank_name,
+                    'bank_account_name'=>$seller->user->bankDetails->account_name,
+                    'bank_account_number'=>$seller->user->bankDetails->account_number,
+                    'price'=>$seller->price,
                 ]);
-                break;
+                $seller->balance -= $coin_amt;
+                $seller->save();
+                #send message
+                return ['success'=>$trade->id];
+            case 'sell':
+                $buyer = Buyer::where([
+                    ['id', $trader_id],
+                    //['user_id', '<>', $user->id]
+                ])->first();
+
+                if(!$buyer) return ["error"=>"Buyer not found"];
+                if($coin_amt < $buyer->min)
+                    return ["error"=>"Buyer's minimum is $buyer->min $buyer->coin"];
+
+                if($buyer->balance < $coin_amt)
+                    return ["error"=>"Buyer's quantity has reduced to $buyer->balance $buyer->coin"];
+
+                $seller = Seller::create([
+                    'user_id'=>$user->id,
+                    'amount'=>$coin_amt,
+                    'balance'=>0,
+                    'min'=>0,
+                    'price'=>$buyer->price,
+                    'coin'=>$buyer->coin,
+                    'currency'=>$buyer->currency
+                ]);
+
+                #create trade
+                $trade = Trade::create([
+                    'buyer'=>$buyer->id,
+                    'seller'=>$seller->id,
+                    'coin'=>$buyer->coin,
+                    'amount'=>$coin_amt,
+                    'buyer_address'=>$address,
+                    'bank_name'=>$seller->user->bankDetails->bank_name,
+                    'bank_account_name'=>$seller->user->bankDetails->account_name,
+                    'bank_account_number'=>$seller->user->bankDetails->account_number,
+                    'price'=>$buyer->price,
+                ]);
+                $buyer->balance -= $coin_amt;
+                $buyer->save();
+                #send message
+                return ['success'=>$trade->id];
+
             default:
                 die();
         }
@@ -404,7 +472,152 @@ class MarketController extends Controller
 
     public  function payment($id)
     {
+        $user = Auth::user();
+        $trade = Trade::findOrFail($id);
 
+        $buyer = Buyer::findOrFail($trade->buyer);
+        $seller = Seller::findOrFail($trade->seller);
+
+        if($trade){
+            if($buyer->user_id != $user->id || $seller->user_id != $user->id)
+                return  back();
+            
+            $trade['cur_symbol'] = config('currencies')[$buyer->currency]['symbol'];
+            $fiat = convertToFiat($trade->coin, $trade->amount, $trade->price);
+            $trade['fiat'] = number_format($fiat, 2, '.', ',');
+
+            if($user->id == $buyer->user_id){
+                $seller['name'] = $seller->user->name;
+                $seller['phone'] = $seller->user->phone;
+            }else{
+                $buyer['name'] = $buyer->user->name;
+                $buyer['phone'] = $buyer->user->phone;
+            }
+
+            return Inertia::render('Payment', compact('trade', 'buyer', 'seller', 'user'));
+        }
+        return back();
+    }
+
+    public function confirmCashSent(Request $request)
+    {
+        $user = Auth::user();
+        $this->validate($request, [
+            'id'=>['required'],
+            'buyer'=>['required']
+        ]);
+
+        $id = $request->input('id');
+        $buyer_id = $request->input('buyer');
+        $buyer = Buyer::findOrFail($buyer_id);
+
+        if($buyer->user_id != $user->id)
+            return ['error'=>"Not found"];
+
+        $trade = Trade::where([
+            ['id', $id],
+            ['buyer', $buyer->id],
+            ['status', 0]
+        ])->first();
+
+        if(!$trade) return ['error'=>"Not found"];
+
+        $trade->status = 1;
+        $trade->save();
+        return ["success"=>"done"];
+    }
+
+    public function confirmCashReceived(Request $request)
+    {
+        $user = Auth::user();
+        $this->validate($request, [
+            'id'=>['required'],
+            'seller'=>['required']
+        ]);
+
+        $id = $request->input('id');
+        $seller_id = $request->input('seller');
+        $seller = Seller::findOrFail($seller_id);
+
+        if($seller->user_id != $user->id)
+            return ['error'=>"Not found"];
+
+        $trade = Trade::where([
+            ['id', $id],
+            ['seller', $seller->id],
+            ['status', 1]
+        ])->first();
+
+        if(!$trade) return ['error'=>"Not found"];
+
+        $trade->status = 2;
+        $trade->save();
+        return ["success"=>"done"];
+    }
+
+    public function cancelTrade(Request $request)
+    {
+        $user = Auth::user();
+        $this->validate($request, [
+            'id'=>['required'],
+            'buyer'=>['required']
+        ]);
+
+        $id = $request->input('id');
+        $buyer_id = $request->input('buyer');
+        $buyer = Buyer::findOrFail($buyer_id);
+
+        if($buyer->user_id != $user->id)
+            return ['error'=>"Not found"];
+
+        $trade = Trade::where([
+            ['id', $id],
+            ['buyer', $buyer->id],
+            ['status', 0]
+        ])->first();
+
+        if(!$trade) return ['error'=>"Not found"];
+
+        $buyer->balance += $trade->amount;
+        $buyer->save();
+
+        $seller = Seller::find($trade->seller);
+        if($seller){
+            $seller->balance += $trade->amount;
+            $seller->save();
+        }
+        $trade->delete();
+        return ["success"=>"done"];
+    }
+
+    public function openDispute(Request $request)
+    {
+        $user = Auth::user();
+        $id = $request->input('id');
+        $msg = $request->input('msg');
+        $issuer = "";
+
+        if(strlen($msg) > 1000) return ["error"=>"Text too long"];
+        
+        $trade = Trade::find($id);
+        if(!$trade) return ['error'=>"Not found"];
+        $buyer = Buyer::find($trade->buyer);
+        $seller = Seller::find($trade->seller);
+
+        if($buyer->user_id == $user->id){
+            $issuer = "buyer";
+        }else if($seller->user_id == $user->id){
+            $issuer = "seller";
+        }else{
+            return ["error"=>'Invalid'];
+        }
+
+        OpenIssue::create([
+            'trade_id'=>$trade->id,
+            'issuer'=>$issuer,
+            'msg'=>$msg
+        ]);
+        return ["success"=>"Dispute Submitted"];
     }
 
     public function getCurrencyList()
@@ -451,6 +664,49 @@ class MarketController extends Controller
                 'id'
             )
         );
+    }
+
+
+    public function showSellers($id)
+    {
+        $user = Auth::user();
+        $buyer = Buyer::find($id);
+
+        if($buyer->user_id != $user->id)
+            return back();
+
+        $trades = Trade::where('buyer', $buyer->id)->get();
+        $count = 1;
+
+        foreach($trades as $trade){
+            $trade['name'] = $trade->theSeller->user->name;
+            $trade['time'] = "<div>".$trade->created_at->diffForHumans()."</div>".$trade->created_at->isoFormat('lll');
+            $trade['count'] = $count++;
+        }   
+
+        $type = 'sellers';
+        return Inertia::render('Market/Request', compact('trades', 'type'));
+    }
+
+    public function showBuyers($id)
+    {
+        $user = Auth::user();
+        $seller = Seller::find($id);
+
+        if($seller->user_id != $user->id)
+            return back();
+
+        $trades = Trade::where('seller', $id)->get();
+        $count = 1;
+
+        foreach($trades as $trade){
+            $trade['name'] = $trade->theBuyer->user->name;
+            $trade['time'] = "<div>".$trade->created_at->diffForHumans()."</div>".$trade->created_at->isoFormat('lll');
+            $trade['count'] = $count++;
+        }
+
+        $type = 'buyers';
+        return Inertia::render('Market/Request', compact('trades', 'type'));
     }
 
 

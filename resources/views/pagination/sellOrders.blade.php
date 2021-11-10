@@ -13,7 +13,7 @@
             <td>
                 {{$order->newRequest()}}/<span class="text-success">{{$order->completedRequest()}}</span>
                 <div>
-                    <a href="" class="text-success">view</a>
+                    <a href="{{route('market.buy_request', $order->id)}}" class="text-success">view</a>
                 </div> 
             </td>
             <td>
