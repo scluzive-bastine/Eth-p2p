@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0f398d6e6028b59899431b5a9046045",
+    "content-hash": "594e8691d821c0f87f15187260f44f1e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -61,6 +61,51 @@
                 "source": "https://github.com/asm89/stack-cors/tree/v2.0.3"
             },
             "time": "2021-03-11T06:42:03+00:00"
+        },
+        {
+            "name": "benjamin0000/ethereum-address-validator",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Benjamin0000/ethereum-address-validator.git",
+                "reference": "821c73b50cd1d7063d09b1070206bdaa5e9d6f33"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Benjamin0000/ethereum-address-validator/zipball/821c73b50cd1d7063d09b1070206bdaa5e9d6f33",
+                "reference": "821c73b50cd1d7063d09b1070206bdaa5e9d6f33",
+                "shasum": ""
+            },
+            "require": {
+                "kornrunner/keccak": "^1.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Benji\\Ethereum\\": "./src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Odiowa",
+                    "email": "benen250@gmail.com"
+                }
+            ],
+            "description": "Validate etheruem address",
+            "support": {
+                "issues": "https://github.com/Benjamin0000/ethereum-address-validator/issues",
+                "source": "https://github.com/Benjamin0000/ethereum-address-validator/tree/main"
+            },
+            "time": "2021-11-11T10:17:41+00:00"
         },
         {
             "name": "brick/math",
@@ -2342,50 +2387,6 @@
                 "source": "https://github.com/bobthecow/psysh/tree/v0.10.8"
             },
             "time": "2021-04-10T16:23:39+00:00"
-        },
-        {
-            "name": "psychob/ethereum-address-validator",
-            "version": "1.1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/psychob/ethereum-address-validator.git",
-                "reference": "70f83879253cb2e472908696dbe8c7ce5631183a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/psychob/ethereum-address-validator/zipball/70f83879253cb2e472908696dbe8c7ce5631183a",
-                "reference": "70f83879253cb2e472908696dbe8c7ce5631183a",
-                "shasum": ""
-            },
-            "require": {
-                "kornrunner/keccak": "^1.0",
-                "php": "^7.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PsychoB\\Ethereum\\": "./src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MPL-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Andrzej Budzanowski",
-                    "email": "kontakt@andrzej.budzanowski.pl"
-                }
-            ],
-            "description": "Validate etheruem address",
-            "support": {
-                "issues": "https://github.com/psychob/ethereum-address-validator/issues",
-                "source": "https://github.com/psychob/ethereum-address-validator/tree/1.1.4"
-            },
-            "time": "2019-06-27T08:38:05+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -7919,7 +7920,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "benjamin0000/ethereum-address-validator": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

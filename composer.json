@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "benjamin0000/ethereum-address-validator": "dev-main",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -13,7 +14,6 @@
         "laravel/framework": "^8.40",
         "laravel/sanctum": "^2.12",
         "laravel/tinker": "^2.5",
-        "psychob/ethereum-address-validator": "^1.1",
         "simplito/elliptic-php": "^1.0",
         "tightenco/ziggy": "^1.4"
     },
