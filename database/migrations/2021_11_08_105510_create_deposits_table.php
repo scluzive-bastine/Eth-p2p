@@ -15,10 +15,10 @@ class CreateDepositsTable extends Migration
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('seller_id');
-            $table->string('address');
-            $table->string('public');
-            $table->string('private');
-            $table->string('wif');
+            $table->string('address', 500);
+            $table->string('public', 500);
+            $table->string('private', 500);
+            $table->string('wif', 500);
             $table->string('coin');
             $table->boolean('status');
             $table->decimal('amt', 65, 8);
