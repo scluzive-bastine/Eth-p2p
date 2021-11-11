@@ -12,6 +12,7 @@ class BlockCypher
 
     public static function generateAddress($coin)
     {
+        $coin = strtolower($coin);
         $response = Http::post("https://api.blockcypher.com/v1/$coin/main/addrs");
         return $response->json();
     }
