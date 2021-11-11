@@ -15,6 +15,7 @@ class Deposit extends Model
         'public',
         'private', 
         'wif',
-        'coin'
+        'coin',
+        'amt'
     ];
 }
