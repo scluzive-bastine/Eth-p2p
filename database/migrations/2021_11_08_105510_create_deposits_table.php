@@ -20,7 +20,7 @@ class CreateDepositsTable extends Migration
             $table->string('private', 500);
             $table->string('wif', 500);
             $table->string('coin');
-            $table->boolean('status');
+            $table->boolean('status')->default(0);
             $table->decimal('amt', 65, 8);
             $table->timestamps();
         });
