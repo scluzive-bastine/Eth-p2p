@@ -26,7 +26,8 @@ class CoinSeeder extends Seeder
             Crypto::create([
                 'name'=>$cryptos[$i]['name'],
                 'symbol'=>$cryptos[$i]['symbol'],
-                'fee'=>2.2
+                'fee'=>2.2,
+                'min'=>0.1
             ]);
         }
     }
