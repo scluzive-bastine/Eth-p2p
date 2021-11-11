@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use \PsychoB\Ethereum\AddressValidator;
+use \Benji\Ethereum\AddressValidator;
 
 class SignInController extends Controller
 {
